@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Garage Detailing</title>
+  <meta name="description" content="">
+  <meta name="theme-color" content="#111418">
+  <link rel="stylesheet" href="styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AutoRepair",
+    "name": "Garage Detailing",
+    "telephone": "+998337302777",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Chust street, 10",
+      "addressLocality": "Tashkent",
+      "addressCountry": "UZ"
+    },
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      "opens": "09:00",
+      "closes": "22:00"
+    }
+  }
+  </script>
+</head>
+<body>
+  <header class="header">
+    <div class="container header__row">
+      <a href="#top" class="brand" aria-label="Garage Detailing">
+        <span class="brand__logo" id="brandLogo">G</span>
+        <span class="brand__name">Garage <b>Detailing</b></span>
+      </a>
+      <nav class="nav" id="nav">
+        <a href="#services" data-i18n="navServices"></a>
+        <a href="#why" data-i18n="navWhy"></a>
+        <a href="#how" data-i18n="navHow"></a>
+        <a href="#faq" data-i18n="navFaq"></a>
+        <a href="#contacts" data-i18n="navContacts"></a>
+      </nav>
+      <div class="header__actions">
+        <div class="lang" role="group" aria-label="Language">
+          <button type="button" data-lang="ru">RU</button>
+          <button type="button" data-lang="uz">UZ</button>
+          <button type="button" data-lang="en">EN</button>
+        </div>
+        <a href="#book" class="btn btn--primary btn--sm" data-i18n="cta"></a>
+        <button type="button" class="burger" id="burger" aria-label="Menu" aria-expanded="false"><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero__grid">
+        <div>
+          <h1 data-i18n="heroTitle"></h1>
+          <p class="hero__text" data-i18n="heroText"></p>
+          <div class="hero__buttons">
+            <a href="#book" class="btn btn--primary" data-i18n="cta"></a>
+            <a href="tel:+998337302777" class="btn btn--ghost" data-i18n="heroCall"></a>
+          </div>
+        </div>
+        <ul class="stats">
+          <li><b data-i18n="stat1"></b><span data-i18n="stat2"></span></li>
+          <li><b data-i18n="stat3"></b><span data-i18n="stat4"></span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" id="services">
+      <div class="container">
+        <h2 data-i18n="servicesTitle"></h2>
+        <p class="section__sub" data-i18n="servicesSub"></p>
+        <div class="tabs" id="tabs" role="tablist"></div>
+        <div class="cards" id="cards"></div>
+      </div>
+    </section>
+
+    <section class="section section--alt" id="why">
+      <div class="container">
+        <h2 data-i18n="whyTitle"></h2>
+        <div class="grid3" id="whyGrid"></div>
+      </div>
+    </section>
+
+    <section class="section" id="how">
+      <div class="container">
+        <h2 data-i18n="howTitle"></h2>
+        <div class="grid3" id="howGrid"></div>
+      </div>
+    </section>
+
+    <section class="section section--alt" id="book">
+      <div class="container book">
+        <div>
+          <h2 data-i18n="bookTitle"></h2>
+          <p class="section__sub" data-i18n="bookSub"></p>
+          <div class="bot-box" id="botBox" hidden>
+            <h3 data-i18n="botTitle"></h3>
+            <p data-i18n="botText"></p>
+            <a class="btn btn--ghost" id="botLink" target="_blank" rel="noopener" data-i18n="botBtn"></a>
+          </div>
+        </div>
+        <form class="form" id="bookForm" novalidate>
+          <label><span data-i18n="fService"></span>
+            <select name="serviceId" id="fService" required></select>
+          </label>
+          <div class="form__row">
+            <label><span data-i18n="fDate"></span>
+              <select name="date" id="fDate" required></select>
+            </label>
+            <label><span data-i18n="fTime"></span>
+              <select name="time" id="fTime" required></select>
+            </label>
+          </div>
+          <label><span data-i18n="fName"></span>
+            <input name="name" type="text" autocomplete="name" maxlength="80" required>
+          </label>
+          <label><span data-i18n="fPhone"></span>
+            <input name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+998 90 123-45-67" maxlength="20" required>
+          </label>
+          <label><span data-i18n="fCar"></span>
+            <input name="car" type="text" maxlength="80">
+          </label>
+          <label><span data-i18n="fComment"></span>
+            <textarea name="comment" rows="3" maxlength="300"></textarea>
+          </label>
+          <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <p class="form__error" id="formError" role="alert" hidden></p>
+          <button class="btn btn--primary btn--block" type="submit" id="submitBtn" data-i18n="send"></button>
+          <div class="form__ok" id="formOk" hidden>
+            <h3 data-i18n="okTitle"></h3>
+            <p><span data-i18n="okText"></span>: <b id="okId"></b></p>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="container container--narrow">
+        <h2 data-i18n="faqTitle"></h2>
+        <div id="faqList"></div>
+      </div>
+    </section>
+
+    <section class="section section--alt" id="contacts">
+      <div class="container contacts">
+        <div>
+          <h2 data-i18n="contactsTitle"></h2>
+          <dl class="contacts__list">
+            <dt data-i18n="address"></dt><dd id="cAddress"></dd>
+            <dt data-i18n="phones"></dt><dd id="cPhones"></dd>
+            <dt data-i18n="hours"></dt><dd id="cHours"></dd>
+          </dl>
+          <div class="socials" id="socials"></div>
+        </div>
+        <iframe class="map" id="map" title="Map" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">© <span id="year"></span> Garage Detailing. <span data-i18n="footer"></span></div>
+  </footer>
+
+  <script src="i18n.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

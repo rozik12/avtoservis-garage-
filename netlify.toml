@@ -1,0 +1,16 @@
+[build]
+  command = "node scripts/build-web.js"
+  publish = "web"
+
+[functions]
+  directory = "netlify/functions"
+
+[[redirects]]
+  from = "/api/booking"
+  to = "/.netlify/functions/booking"
+  status = 200
+
+[[redirects]]
+  from = "/api/slots"
+  to = "/.netlify/functions/slots"
+  status = 200

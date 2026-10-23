@@ -1,0 +1,43 @@
+{
+  "name": "Garage Detailing",
+  "tagline": {
+    "ru": "Автосервис, детейлинг и мойка в Ташкенте",
+    "uz": "Toshkentda avtoservis, detayling va avtomoyka",
+    "en": "Auto service, detailing and car wash in Tashkent"
+  },
+  "address": {
+    "ru": "Ташкент, Мирзо-Улугбекский район, ул. Чуст, 10",
+    "uz": "Toshkent sh., Mirzo Ulug'bek tumani, Chust ko'chasi, 10",
+    "en": "Tashkent, Mirzo Ulugbek district, Chust street, 10"
+  },
+  "phones": [
+    "+998337302777",
+    "+998977302777"
+  ],
+  "phonesDisplay": [
+    "+998 33 730-27-77",
+    "+998 97 730-27-77"
+  ],
+  "telegram": "",
+  "instagram": "",
+  "mapQuery": "Tashkent, Chust street 10",
+  "workDays": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "openHour": 9,
+  "closeHour": 22,
+  "slotMinutes": 60,
+  "bookingDaysAhead": 7,
+  "hours": {
+    "ru": "Пн–Пт 09:00–22:00, Сб–Вс выходной",
+    "uz": "Du–Ju 09:00–22:00, Sh–Yak dam olish",
+    "en": "Mon–Fri 09:00–22:00, Sat–Sun closed"
+  },
+  "currency": "UZS",
+  "notes": "Hours, phones and address come from the Golden Pages directory (renewed 2026-02-10). Fill in telegram/instagram and confirm hours with the owner.",
+  "botUsername": ""
+}

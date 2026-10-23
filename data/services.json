@@ -1,0 +1,122 @@
+{
+  "_note": "Prices are PLACEHOLDER estimates in UZS ('from'). Replace with the real price list before launch. This file feeds the website, the Telegram bot and the booking form.",
+  "categories": [
+    {
+      "id": "service",
+      "icon": "🔧",
+      "name": { "ru": "Автосервис", "uz": "Avtoservis", "en": "Auto service" },
+      "desc": {
+        "ru": "Диагностика, ремонт и плановое обслуживание",
+        "uz": "Diagnostika, ta'mirlash va rejali xizmat ko'rsatish",
+        "en": "Diagnostics, repair and scheduled maintenance"
+      }
+    },
+    {
+      "id": "detailing",
+      "icon": "✨",
+      "name": { "ru": "Детейлинг", "uz": "Detayling", "en": "Detailing" },
+      "desc": {
+        "ru": "Полировка, керамика, защитные плёнки, химчистка",
+        "uz": "Jilolash, keramika, himoya plyonkalari, kimyoviy tozalash",
+        "en": "Polishing, ceramic coating, protective film, deep cleaning"
+      }
+    },
+    {
+      "id": "wash",
+      "icon": "🚿",
+      "name": { "ru": "Автомойка", "uz": "Avtomoyka", "en": "Car wash" },
+      "desc": {
+        "ru": "Бесконтактная и ручная мойка, мойка двигателя и днища",
+        "uz": "Aloqasiz va qo'lda yuvish, dvigatel va tag qismini yuvish",
+        "en": "Touchless and hand wash, engine and underbody wash"
+      }
+    }
+  ],
+  "services": [
+    {
+      "id": "diagnostics", "category": "service", "priceFrom": 80000, "minutes": 60,
+      "name": { "ru": "Компьютерная диагностика", "uz": "Kompyuter diagnostikasi", "en": "Computer diagnostics" },
+      "desc": { "ru": "Считывание ошибок, проверка датчиков и блоков управления", "uz": "Xatolarni o'qish, datchiklar va boshqaruv bloklarini tekshirish", "en": "Fault code reading, sensor and ECU checks" }
+    },
+    {
+      "id": "oil-change", "category": "service", "priceFrom": 60000, "minutes": 45,
+      "name": { "ru": "Замена масла и фильтров", "uz": "Moy va filtrlarni almashtirish", "en": "Oil and filter change" },
+      "desc": { "ru": "Моторное масло, масляный и воздушный фильтры", "uz": "Dvigatel moyi, moy va havo filtrlari", "en": "Engine oil, oil and air filters" }
+    },
+    {
+      "id": "brakes", "category": "service", "priceFrom": 120000, "minutes": 90,
+      "name": { "ru": "Тормозная система", "uz": "Tormoz tizimi", "en": "Brake system" },
+      "desc": { "ru": "Замена колодок, дисков, прокачка тормозной жидкости", "uz": "Kolodka va disklarni almashtirish, tormoz suyuqligini haydash", "en": "Pads, discs and brake fluid service" }
+    },
+    {
+      "id": "suspension", "category": "service", "priceFrom": 150000, "minutes": 120,
+      "name": { "ru": "Ходовая часть", "uz": "Yurish qismi", "en": "Suspension" },
+      "desc": { "ru": "Диагностика и ремонт подвески, рулевого управления", "uz": "Osma va rul boshqaruvini diagnostika va ta'mirlash", "en": "Suspension and steering diagnostics and repair" }
+    },
+    {
+      "id": "alignment", "category": "service", "priceFrom": 100000, "minutes": 60,
+      "name": { "ru": "Развал-схождение", "uz": "Razval-sxojdeniye", "en": "Wheel alignment" },
+      "desc": { "ru": "Регулировка углов установки колёс на 3D-стенде", "uz": "G'ildirak burchaklarini 3D stendda sozlash", "en": "Wheel angle adjustment on a 3D stand" }
+    },
+    {
+      "id": "tires", "category": "service", "priceFrom": 80000, "minutes": 60,
+      "name": { "ru": "Шиномонтаж и балансировка", "uz": "Shinomontaj va balansirovka", "en": "Tire fitting and balancing" },
+      "desc": { "ru": "Сезонная замена, ремонт проколов, балансировка", "uz": "Mavsumiy almashtirish, teshiklarni ta'mirlash, balansirovka", "en": "Seasonal swap, puncture repair, balancing" }
+    },
+    {
+      "id": "ac", "category": "service", "priceFrom": 150000, "minutes": 90,
+      "name": { "ru": "Кондиционер: заправка и ремонт", "uz": "Konditsioner: to'ldirish va ta'mirlash", "en": "A/C refill and repair" },
+      "desc": { "ru": "Диагностика, поиск утечек, заправка фреоном", "uz": "Diagnostika, sizib chiqishni topish, freon bilan to'ldirish", "en": "Diagnostics, leak search, refrigerant refill" }
+    },
+    {
+      "id": "electrics", "category": "service", "priceFrom": 100000, "minutes": 90,
+      "name": { "ru": "Автоэлектрика", "uz": "Avtoelektrika", "en": "Auto electrics" },
+      "desc": { "ru": "Проводка, генератор, стартер, аккумулятор", "uz": "Simlar, generator, starter, akkumulyator", "en": "Wiring, alternator, starter, battery" }
+    },
+    {
+      "id": "polish", "category": "detailing", "priceFrom": 600000, "minutes": 240,
+      "name": { "ru": "Полировка кузова", "uz": "Kuzovni jilolash", "en": "Body polishing" },
+      "desc": { "ru": "Удаление царапин и потёртостей, восстановление блеска", "uz": "Chiziqlarni olib tashlash, yaltiroqlikni tiklash", "en": "Scratch and swirl removal, restoring gloss" }
+    },
+    {
+      "id": "ceramic", "category": "detailing", "priceFrom": 1500000, "minutes": 480,
+      "name": { "ru": "Керамическое покрытие", "uz": "Keramik qoplama", "en": "Ceramic coating" },
+      "desc": { "ru": "Защита ЛКП на годы, гидрофобный эффект", "uz": "Bo'yoqni yillar davomida himoya qilish, gidrofob effekt", "en": "Long-lasting paint protection with a hydrophobic effect" }
+    },
+    {
+      "id": "ppf", "category": "detailing", "priceFrom": 2500000, "minutes": 600,
+      "name": { "ru": "Антигравийная плёнка (PPF)", "uz": "Antigravi plyonka (PPF)", "en": "Paint protection film (PPF)" },
+      "desc": { "ru": "Защита от сколов и царапин: капот, бампер, зоны риска", "uz": "Chiplar va chiziqlardan himoya: kapot, bamper, xavfli joylar", "en": "Chip and scratch protection: hood, bumper, high-risk areas" }
+    },
+    {
+      "id": "interior", "category": "detailing", "priceFrom": 400000, "minutes": 240,
+      "name": { "ru": "Химчистка салона", "uz": "Salonni kimyoviy tozalash", "en": "Interior deep cleaning" },
+      "desc": { "ru": "Сиденья, потолок, пластик, кожа, удаление запахов", "uz": "O'rindiqlar, shift, plastik, teri, hidlarni yo'qotish", "en": "Seats, headliner, plastics, leather, odor removal" }
+    },
+    {
+      "id": "headlights", "category": "detailing", "priceFrom": 150000, "minutes": 90,
+      "name": { "ru": "Полировка фар", "uz": "Faralarni jilolash", "en": "Headlight restoration" },
+      "desc": { "ru": "Возвращаем прозрачность и яркость света", "uz": "Shaffoflik va yorug'likni qaytaramiz", "en": "Restores clarity and light output" }
+    },
+    {
+      "id": "express-wash", "category": "wash", "priceFrom": 40000, "minutes": 30,
+      "name": { "ru": "Экспресс-мойка", "uz": "Ekspress-moyka", "en": "Express wash" },
+      "desc": { "ru": "Кузов, колёса, стёкла за 30 минут", "uz": "Kuzov, g'ildiraklar, oynalar 30 daqiqada", "en": "Body, wheels and glass in 30 minutes" }
+    },
+    {
+      "id": "full-wash", "category": "wash", "priceFrom": 90000, "minutes": 60,
+      "name": { "ru": "Комплексная мойка", "uz": "Kompleks moyka", "en": "Full wash" },
+      "desc": { "ru": "Кузов, салон, пылесос, чернение резины", "uz": "Kuzov, salon, changyutgich, rezinani qoralash", "en": "Body, interior, vacuum, tire shine" }
+    },
+    {
+      "id": "engine-wash", "category": "wash", "priceFrom": 60000, "minutes": 30,
+      "name": { "ru": "Мойка двигателя", "uz": "Dvigatelni yuvish", "en": "Engine wash" },
+      "desc": { "ru": "Безопасная очистка моторного отсека", "uz": "Dvigatel bo'limini xavfsiz tozalash", "en": "Safe engine bay cleaning" }
+    },
+    {
+      "id": "underbody-wash", "category": "wash", "priceFrom": 50000, "minutes": 30,
+      "name": { "ru": "Мойка днища", "uz": "Tag qismini yuvish", "en": "Underbody wash" },
+      "desc": { "ru": "Удаление грязи и реагентов с днища и арок", "uz": "Tag va g'ildirak kamarlaridan kir va reagentlarni olib tashlash", "en": "Removes dirt and road salt from underbody and arches" }
+    }
+  ]
+}
