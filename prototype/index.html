@@ -1,0 +1,614 @@
+<title>Garage Detailing</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap&subset=cyrillic,latin">
+<style>
+/* Layout: a workshop price board. Hero pairs the pitch with a live bay schedule; the rest reads like job paperwork. */
+:root {
+  --bg: #edeff0;
+  --surface: #f8f9f9;
+  --ink: #11181c;
+  --muted: #56636b;
+  --line: #cdd4d8;
+  --accent: #0b5f66;
+  --accent-ink: #ffffff;
+  --signal: #c2410c;
+  --ok: #1f7a4d;
+  --font-display: "Oswald", "Arial Narrow", Impact, sans-serif;
+  --font-body: "Onest", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1316; --surface: #151c20; --ink: #e9eef0; --muted: #93a1a9; --line: #26323a;
+    --accent: #3db5be; --accent-ink: #05191b; --signal: #ff8a3d; --ok: #55c58d; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1316; --surface: #151c20; --ink: #e9eef0; --muted: #93a1a9; --line: #26323a;
+  --accent: #3db5be; --accent-ink: #05191b; --signal: #ff8a3d; --ok: #55c58d; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 400 16px/1.55 var(--font-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+h1, h2, h3 { font-family: var(--font-display); text-transform: uppercase; letter-spacing: .015em; line-height: 1.08; margin: 0; text-wrap: balance; font-weight: 600; }
+h1 { font-size: clamp(2.5rem, 7vw, 4.6rem); }
+h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); }
+h3 { font-size: 1.15rem; }
+p { margin: 0; }
+a { color: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.wrap { width: min(1160px, 100%); margin-inline: auto; }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.eyebrow { font: 600 .78rem/1 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+
+/* Prototype strip */
+.proto { background: var(--ink); color: var(--bg); font: 500 .8rem/1.4 var(--font-mono); padding: 8px 0; }
+.proto .wrap { display: flex; gap: 8px 20px; flex-wrap: wrap; justify-content: space-between; }
+
+/* Header */
+.head { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg); border-bottom: 1px solid var(--line); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); }
+.head .wrap { display: flex; align-items: center; gap: 16px; min-height: 64px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 600 1.25rem/1 var(--font-display); text-transform: uppercase; letter-spacing: .03em; white-space: nowrap; }
+.mark { width: 36px; height: 36px; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; font: 700 1rem/1 var(--font-display); clip-path: polygon(0 0, 78% 0, 100% 22%, 100% 100%, 0 100%); }
+.brand small { display: block; font: 500 .6rem/1 var(--font-mono); letter-spacing: .14em; color: var(--muted); margin-top: 3px; }
+.nav { display: flex; gap: 22px; margin-left: auto; font-size: .92rem; color: var(--muted); }
+.nav a { text-decoration: none; padding: 6px 0; }
+.nav a:hover { color: var(--ink); }
+.tools { display: flex; align-items: center; gap: 10px; }
+.lang { display: flex; border: 1px solid var(--line); }
+.lang button { background: none; border: 0; padding: 6px 9px; font: 600 .75rem/1 var(--font-mono); color: var(--muted); cursor: pointer; }
+.lang button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.phone-chip { font: 600 .85rem/1 var(--font-mono); text-decoration: none; padding: 9px 12px; border: 1px solid var(--line); white-space: nowrap; }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); padding: 13px 22px; font: 600 .95rem/1 var(--font-body); cursor: pointer; text-decoration: none; transition: filter .15s; }
+.btn:hover { filter: brightness(1.1); }
+.btn.ghost { background: transparent; color: var(--ink); border-color: var(--ink); }
+.btn.sm { padding: 8px 14px; font-size: .85rem; }
+.btn:disabled { opacity: .55; cursor: not-allowed; }
+
+/* Hero */
+.hero { padding-block: clamp(40px, 7vw, 88px); }
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 64px); align-items: center; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.lede { color: var(--muted); font-size: 1.1rem; max-width: 34em; margin-top: 18px; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 28px; margin: 34px 0 0; padding: 18px 0 0; border-top: 1px solid var(--line); list-style: none; }
+.facts li { font: 500 .85rem/1.3 var(--font-mono); color: var(--muted); }
+.facts b { display: block; color: var(--ink); font-size: 1.05rem; }
+
+.board { background: var(--surface); border: 1px solid var(--line); min-width: 0; }
+.board header { padding: 16px 18px 0; display: grid; gap: 10px; }
+.board header div { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.board h3 { font-size: 1.05rem; }
+.days { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+.day { flex: 0 0 auto; background: none; border: 1px solid var(--line); padding: 7px 11px; font: 600 .78rem/1.2 var(--font-mono); cursor: pointer; text-align: center; color: var(--muted); }
+.day[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.slots { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; padding: 16px 18px; }
+.slot { border: 1px solid var(--accent); background: transparent; color: var(--accent); padding: 10px 0; font: 600 .9rem/1 var(--font-mono); cursor: pointer; }
+.slot:hover { background: var(--accent); color: var(--accent-ink); }
+.slot[disabled] { border: 1px dashed var(--line); color: var(--muted); text-decoration: line-through; cursor: not-allowed; background: none; opacity: .75; }
+.board footer { padding: 0 18px 16px; font: 500 .75rem/1.4 var(--font-mono); color: var(--muted); display: flex; gap: 14px; flex-wrap: wrap; }
+.key::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 6px; border: 1px solid var(--accent); vertical-align: -1px; }
+.key.off::before { border: 1px dashed var(--muted); }
+
+/* Sections */
+.section { padding-block: clamp(44px, 7vw, 84px); }
+.section.alt { background: var(--surface); border-block: 1px solid var(--line); }
+.sec-head { display: grid; gap: 10px; margin-bottom: 30px; max-width: 46em; }
+.sec-head p { color: var(--muted); }
+
+/* Price board */
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+.tab { background: none; border: 1px solid var(--line); padding: 10px 18px; cursor: pointer; font: 600 .85rem/1 var(--font-mono); letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.tab[aria-selected="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.tab-note { color: var(--muted); margin-bottom: 8px; }
+.rows { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--ink); }
+.row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 6px 22px; align-items: center; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.row .name { font: 600 1.08rem/1.25 var(--font-body); }
+.row .desc { grid-column: 1; color: var(--muted); font-size: .92rem; }
+.row .price { font: 600 1.05rem/1 var(--font-mono); color: var(--signal); white-space: nowrap; grid-column: 2; grid-row: 1; text-align: right; }
+.row .time { font: 500 .8rem/1 var(--font-mono); color: var(--muted); grid-column: 2; grid-row: 2; text-align: right; }
+.row .btn { grid-column: 3; grid-row: 1 / span 2; }
+
+/* Steps */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; counter-reset: s; border: 1px solid var(--line); background: var(--bg); }
+.steps li { padding: 26px; border-right: 1px solid var(--line); display: grid; gap: 10px; align-content: start; }
+.steps li:last-child { border-right: 0; }
+.steps li::before { counter-increment: s; content: "0" counter(s); font: 600 .85rem/1 var(--font-mono); color: var(--accent); }
+.steps p { color: var(--muted); }
+
+/* Why */
+.why { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 48px; }
+.why div { padding: 22px 0; border-top: 1px solid var(--line); display: grid; gap: 6px; }
+.why p { color: var(--muted); }
+
+/* Booking */
+.book { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: clamp(28px, 5vw, 60px); align-items: start; }
+.form { background: var(--surface); border: 1px solid var(--line); padding: clamp(18px, 3vw, 28px); display: grid; gap: 16px; }
+.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.f { display: grid; gap: 6px; min-width: 0; }
+.f label { font: 600 .72rem/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.f input, .f select, .f textarea { width: 100%; padding: 12px 13px; background: var(--bg); border: 1px solid var(--line); border-radius: 0; }
+.f input:focus, .f select:focus, .f textarea:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: var(--accent); }
+.f .plate { font: 600 1.05rem/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+.err { color: var(--signal); font-size: .9rem; min-height: 1.2em; }
+.sample { color: var(--muted); font-size: .82rem; }
+
+.ticket { margin-top: 4px; border: 2px solid var(--ink); background: var(--bg); padding: 0; }
+.ticket-top { background: var(--ink); color: var(--bg); padding: 10px 16px; display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; font: 600 .8rem/1.2 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; }
+.ticket dl { margin: 0; padding: 16px; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px 18px; }
+.ticket dt { font: 500 .75rem/1.6 var(--font-mono); color: var(--muted); text-transform: uppercase; }
+.ticket dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
+.ticket-foot { border-top: 2px dashed var(--line); padding: 12px 16px; color: var(--muted); font-size: .85rem; }
+
+/* Bot */
+.bot { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 60px); align-items: center; }
+.phone { width: min(360px, 100%); margin-inline: auto; border: 1px solid var(--line); background: var(--surface); display: grid; }
+.phone-bar { padding: 12px 16px; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 10px; font-weight: 600; }
+.phone-bar .mark { width: 28px; height: 28px; font-size: .8rem; }
+.chat { padding: 16px; display: grid; gap: 8px; background: var(--bg); }
+.msg { max-width: 86%; padding: 9px 12px; font-size: .92rem; line-height: 1.4; background: var(--surface); border: 1px solid var(--line); }
+.msg.me { justify-self: end; background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { border: 1px solid var(--accent); color: var(--accent); padding: 6px 10px; font: 600 .78rem/1 var(--font-mono); }
+.bot ul { margin: 18px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.bot li { padding-left: 22px; position: relative; color: var(--muted); }
+.bot li::before { content: ""; position: absolute; left: 0; top: .55em; width: 10px; height: 2px; background: var(--accent); }
+
+/* FAQ */
+.faq { max-width: 780px; }
+details { border-top: 1px solid var(--line); padding: 18px 0; }
+details:last-child { border-bottom: 1px solid var(--line); }
+summary { cursor: pointer; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; font: 500 1.3rem/1 var(--font-mono); color: var(--accent); }
+details[open] summary::after { content: "−"; }
+details p { color: var(--muted); margin-top: 10px; }
+
+/* Contacts */
+.contacts { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 60px); }
+.kv { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 14px 24px; margin: 24px 0 0; }
+.kv dt { font: 500 .78rem/1.7 var(--font-mono); text-transform: uppercase; color: var(--muted); }
+.kv dd { margin: 0; font-weight: 500; }
+.kv a { color: var(--accent); font-family: var(--font-mono); font-weight: 600; }
+.sched { border: 1px solid var(--line); background: var(--surface); padding: 22px; align-self: start; }
+.sched table { width: 100%; border-collapse: collapse; margin-top: 14px; font: 500 .9rem/1 var(--font-mono); }
+.sched td { padding: 11px 0; border-top: 1px solid var(--line); }
+.sched td:last-child { text-align: right; }
+.sched .closed td:last-child { color: var(--muted); }
+
+footer.site { padding-block: 28px; border-top: 1px solid var(--line); color: var(--muted); font-size: .85rem; }
+footer.site .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+
+@media (max-width: 900px) {
+  .hero .wrap, .book, .bot, .contacts { grid-template-columns: minmax(0, 1fr); }
+  .nav { display: none; }
+  .tools { margin-left: auto; }
+  .steps { grid-template-columns: minmax(0, 1fr); }
+  .steps li { border-right: 0; border-bottom: 1px solid var(--line); }
+  .steps li:last-child { border-bottom: 0; }
+  .why { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 560px) {
+  .phone-chip { display: none; }
+  .row { grid-template-columns: minmax(0, 1fr) auto; row-gap: 8px; }
+  .row .name { grid-column: 1 / -1; grid-row: 1; }
+  .row .price { grid-column: 1; grid-row: 2; text-align: left; }
+  .row .time { grid-column: 2; grid-row: 2; }
+  .row .desc { grid-column: 1 / -1; grid-row: 3; }
+  .row .btn { grid-column: 1 / -1; grid-row: 4; justify-self: start; }
+  .two { grid-template-columns: minmax(0, 1fr); }
+  .slots { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } }
+</style>
+
+<div class="proto"><div class="wrap"><span id="protoA"></span><span id="protoB"></span></div></div>
+
+<header class="head">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Garage Detailing">
+      <span class="mark" id="logoSlot">GD</span>
+      <span>Garage Detailing<small id="brandSub"></small></span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="#services" data-t="navServices"></a>
+      <a href="#how" data-t="navHow"></a>
+      <a href="#bot" data-t="navBot"></a>
+      <a href="#faq" data-t="navFaq"></a>
+      <a href="#contacts" data-t="navContacts"></a>
+    </nav>
+    <div class="tools">
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="ru">RU</button>
+        <button type="button" data-lang="uz">UZ</button>
+        <button type="button" data-lang="en">EN</button>
+      </div>
+      <a class="phone-chip" href="tel:+998337302777">+998 33 730-27-77</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow" id="heroEyebrow"></p>
+        <h1 id="heroTitle" style="margin-top:14px"></h1>
+        <p class="lede" id="heroText"></p>
+        <div class="cta">
+          <a class="btn" href="#book" data-t="cta"></a>
+          <a class="btn ghost" href="#services" data-t="seePrices"></a>
+        </div>
+        <ul class="facts" id="facts"></ul>
+      </div>
+      <div class="board" aria-live="polite">
+        <header>
+          <div><h3 data-t="boardTitle"></h3><span class="mono" style="font-size:.78rem;color:var(--muted)" data-t="boardSub"></span></div>
+          <div class="days" id="days" role="group"></div>
+        </header>
+        <div class="slots" id="slots"></div>
+        <footer><span class="key" data-t="free"></span><span class="key off" data-t="busy"></span></footer>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt" id="services">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow" data-t="navServices"></p>
+        <h2 data-t="servicesTitle"></h2>
+        <p data-t="servicesSub"></p>
+      </div>
+      <div class="tabs" id="tabs" role="tablist"></div>
+      <p class="tab-note" id="tabNote"></p>
+      <ul class="rows" id="rows"></ul>
+    </div>
+  </section>
+
+  <section class="section" id="how">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow" data-t="navHow"></p>
+        <h2 data-t="howTitle"></h2>
+      </div>
+      <ol class="steps" id="steps"></ol>
+      <div class="why" id="why" style="margin-top:56px"></div>
+    </div>
+  </section>
+
+  <section class="section alt" id="book">
+    <div class="wrap book">
+      <div>
+        <div class="sec-head" style="margin-bottom:0">
+          <p class="eyebrow" data-t="navBook"></p>
+          <h2 data-t="bookTitle"></h2>
+          <p data-t="bookSub"></p>
+        </div>
+        <div class="ticket" id="ticket" hidden>
+          <div class="ticket-top"><span data-t="ticketTitle"></span><span id="tNo" class="mono"></span></div>
+          <dl id="tBody"></dl>
+          <p class="ticket-foot" data-t="ticketFoot"></p>
+        </div>
+      </div>
+      <form class="form" id="form" novalidate>
+        <div class="f"><label for="fService" data-t="fService"></label><select id="fService" name="service"></select></div>
+        <div class="two">
+          <div class="f"><label for="fDate" data-t="fDate"></label><select id="fDate" name="date"></select></div>
+          <div class="f"><label for="fTime" data-t="fTime"></label><select id="fTime" name="time"></select></div>
+        </div>
+        <div class="two">
+          <div class="f"><label for="fName" data-t="fName"></label><input id="fName" name="name" autocomplete="name" maxlength="80"></div>
+          <div class="f"><label for="fPhone" data-t="fPhone"></label><input id="fPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+998 90 123-45-67" maxlength="20"></div>
+        </div>
+        <div class="two">
+          <div class="f"><label for="fCar" data-t="fCar"></label><input id="fCar" name="car" maxlength="60"></div>
+          <div class="f"><label for="fPlate" data-t="fPlate"></label><input class="plate" id="fPlate" name="plate" placeholder="01 A 123 AA" maxlength="12"></div>
+        </div>
+        <div class="f"><label for="fNote" data-t="fNote"></label><textarea id="fNote" name="note" rows="2" maxlength="300"></textarea></div>
+        <p class="err" id="err" role="alert"></p>
+        <button class="btn" type="submit" id="submit" data-t="send"></button>
+        <p class="sample" data-t="demoNote"></p>
+      </form>
+    </div>
+  </section>
+
+  <section class="section" id="bot">
+    <div class="wrap bot">
+      <div>
+        <p class="eyebrow">Telegram</p>
+        <h2 data-t="botTitle" style="margin-top:12px"></h2>
+        <p class="lede" data-t="botText"></p>
+        <ul id="botList"></ul>
+      </div>
+      <div class="phone" aria-label="Telegram bot preview">
+        <div class="phone-bar"><span class="mark">GD</span><span>Garage Detailing</span></div>
+        <div class="chat" id="chat"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt" id="faq">
+    <div class="wrap">
+      <div class="sec-head"><p class="eyebrow" data-t="navFaq"></p><h2 data-t="faqTitle"></h2></div>
+      <div class="faq" id="faqList"></div>
+    </div>
+  </section>
+
+  <section class="section" id="contacts">
+    <div class="wrap contacts">
+      <div>
+        <p class="eyebrow" data-t="navContacts"></p>
+        <h2 data-t="contactsTitle" style="margin-top:12px"></h2>
+        <dl class="kv" id="kv"></dl>
+        <div class="cta"><a class="btn" id="mapLink" href="#" target="_blank" rel="noopener" data-t="openMap"></a></div>
+      </div>
+      <div class="sched">
+        <h3 data-t="hours"></h3>
+        <table id="sched"></table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap"><span>© <span id="yr"></span> Garage Detailing</span><span id="footNote"></span></div>
+</footer>
+
+<script>
+const CATALOG = {"_note":"Prices are PLACEHOLDER estimates in UZS ('from'). Replace with the real price list before launch. This file feeds the website, the Telegram bot and the booking form.","categories":[{"id":"service","icon":"🔧","name":{"ru":"Автосервис","uz":"Avtoservis","en":"Auto service"},"desc":{"ru":"Диагностика, ремонт и плановое обслуживание","uz":"Diagnostika, ta'mirlash va rejali xizmat ko'rsatish","en":"Diagnostics, repair and scheduled maintenance"}},{"id":"detailing","icon":"✨","name":{"ru":"Детейлинг","uz":"Detayling","en":"Detailing"},"desc":{"ru":"Полировка, керамика, защитные плёнки, химчистка","uz":"Jilolash, keramika, himoya plyonkalari, kimyoviy tozalash","en":"Polishing, ceramic coating, protective film, deep cleaning"}},{"id":"wash","icon":"🚿","name":{"ru":"Автомойка","uz":"Avtomoyka","en":"Car wash"},"desc":{"ru":"Бесконтактная и ручная мойка, мойка двигателя и днища","uz":"Aloqasiz va qo'lda yuvish, dvigatel va tag qismini yuvish","en":"Touchless and hand wash, engine and underbody wash"}}],"services":[{"id":"diagnostics","category":"service","priceFrom":80000,"minutes":60,"name":{"ru":"Компьютерная диагностика","uz":"Kompyuter diagnostikasi","en":"Computer diagnostics"},"desc":{"ru":"Считывание ошибок, проверка датчиков и блоков управления","uz":"Xatolarni o'qish, datchiklar va boshqaruv bloklarini tekshirish","en":"Fault code reading, sensor and ECU checks"}},{"id":"oil-change","category":"service","priceFrom":60000,"minutes":45,"name":{"ru":"Замена масла и фильтров","uz":"Moy va filtrlarni almashtirish","en":"Oil and filter change"},"desc":{"ru":"Моторное масло, масляный и воздушный фильтры","uz":"Dvigatel moyi, moy va havo filtrlari","en":"Engine oil, oil and air filters"}},{"id":"brakes","category":"service","priceFrom":120000,"minutes":90,"name":{"ru":"Тормозная система","uz":"Tormoz tizimi","en":"Brake system"},"desc":{"ru":"Замена колодок, дисков, прокачка тормозной жидкости","uz":"Kolodka va disklarni almashtirish, tormoz suyuqligini haydash","en":"Pads, discs and brake fluid service"}},{"id":"suspension","category":"service","priceFrom":150000,"minutes":120,"name":{"ru":"Ходовая часть","uz":"Yurish qismi","en":"Suspension"},"desc":{"ru":"Диагностика и ремонт подвески, рулевого управления","uz":"Osma va rul boshqaruvini diagnostika va ta'mirlash","en":"Suspension and steering diagnostics and repair"}},{"id":"alignment","category":"service","priceFrom":100000,"minutes":60,"name":{"ru":"Развал-схождение","uz":"Razval-sxojdeniye","en":"Wheel alignment"},"desc":{"ru":"Регулировка углов установки колёс на 3D-стенде","uz":"G'ildirak burchaklarini 3D stendda sozlash","en":"Wheel angle adjustment on a 3D stand"}},{"id":"tires","category":"service","priceFrom":80000,"minutes":60,"name":{"ru":"Шиномонтаж и балансировка","uz":"Shinomontaj va balansirovka","en":"Tire fitting and balancing"},"desc":{"ru":"Сезонная замена, ремонт проколов, балансировка","uz":"Mavsumiy almashtirish, teshiklarni ta'mirlash, balansirovka","en":"Seasonal swap, puncture repair, balancing"}},{"id":"ac","category":"service","priceFrom":150000,"minutes":90,"name":{"ru":"Кондиционер: заправка и ремонт","uz":"Konditsioner: to'ldirish va ta'mirlash","en":"A/C refill and repair"},"desc":{"ru":"Диагностика, поиск утечек, заправка фреоном","uz":"Diagnostika, sizib chiqishni topish, freon bilan to'ldirish","en":"Diagnostics, leak search, refrigerant refill"}},{"id":"electrics","category":"service","priceFrom":100000,"minutes":90,"name":{"ru":"Автоэлектрика","uz":"Avtoelektrika","en":"Auto electrics"},"desc":{"ru":"Проводка, генератор, стартер, аккумулятор","uz":"Simlar, generator, starter, akkumulyator","en":"Wiring, alternator, starter, battery"}},{"id":"polish","category":"detailing","priceFrom":600000,"minutes":240,"name":{"ru":"Полировка кузова","uz":"Kuzovni jilolash","en":"Body polishing"},"desc":{"ru":"Удаление царапин и потёртостей, восстановление блеска","uz":"Chiziqlarni olib tashlash, yaltiroqlikni tiklash","en":"Scratch and swirl removal, restoring gloss"}},{"id":"ceramic","category":"detailing","priceFrom":1500000,"minutes":480,"name":{"ru":"Керамическое покрытие","uz":"Keramik qoplama","en":"Ceramic coating"},"desc":{"ru":"Защита ЛКП на годы, гидрофобный эффект","uz":"Bo'yoqni yillar davomida himoya qilish, gidrofob effekt","en":"Long-lasting paint protection with a hydrophobic effect"}},{"id":"ppf","category":"detailing","priceFrom":2500000,"minutes":600,"name":{"ru":"Антигравийная плёнка (PPF)","uz":"Antigravi plyonka (PPF)","en":"Paint protection film (PPF)"},"desc":{"ru":"Защита от сколов и царапин: капот, бампер, зоны риска","uz":"Chiplar va chiziqlardan himoya: kapot, bamper, xavfli joylar","en":"Chip and scratch protection: hood, bumper, high-risk areas"}},{"id":"interior","category":"detailing","priceFrom":400000,"minutes":240,"name":{"ru":"Химчистка салона","uz":"Salonni kimyoviy tozalash","en":"Interior deep cleaning"},"desc":{"ru":"Сиденья, потолок, пластик, кожа, удаление запахов","uz":"O'rindiqlar, shift, plastik, teri, hidlarni yo'qotish","en":"Seats, headliner, plastics, leather, odor removal"}},{"id":"headlights","category":"detailing","priceFrom":150000,"minutes":90,"name":{"ru":"Полировка фар","uz":"Faralarni jilolash","en":"Headlight restoration"},"desc":{"ru":"Возвращаем прозрачность и яркость света","uz":"Shaffoflik va yorug'likni qaytaramiz","en":"Restores clarity and light output"}},{"id":"express-wash","category":"wash","priceFrom":40000,"minutes":30,"name":{"ru":"Экспресс-мойка","uz":"Ekspress-moyka","en":"Express wash"},"desc":{"ru":"Кузов, колёса, стёкла за 30 минут","uz":"Kuzov, g'ildiraklar, oynalar 30 daqiqada","en":"Body, wheels and glass in 30 minutes"}},{"id":"full-wash","category":"wash","priceFrom":90000,"minutes":60,"name":{"ru":"Комплексная мойка","uz":"Kompleks moyka","en":"Full wash"},"desc":{"ru":"Кузов, салон, пылесос, чернение резины","uz":"Kuzov, salon, changyutgich, rezinani qoralash","en":"Body, interior, vacuum, tire shine"}},{"id":"engine-wash","category":"wash","priceFrom":60000,"minutes":30,"name":{"ru":"Мойка двигателя","uz":"Dvigatelni yuvish","en":"Engine wash"},"desc":{"ru":"Безопасная очистка моторного отсека","uz":"Dvigatel bo'limini xavfsiz tozalash","en":"Safe engine bay cleaning"}},{"id":"underbody-wash","category":"wash","priceFrom":50000,"minutes":30,"name":{"ru":"Мойка днища","uz":"Tag qismini yuvish","en":"Underbody wash"},"desc":{"ru":"Удаление грязи и реагентов с днища и арок","uz":"Tag va g'ildirak kamarlaridan kir va reagentlarni olib tashlash","en":"Removes dirt and road salt from underbody and arches"}}]};
+const BUSINESS = {"name":"Garage Detailing","tagline":{"ru":"Автосервис, детейлинг и мойка в Ташкенте","uz":"Toshkentda avtoservis, detayling va avtomoyka","en":"Auto service, detailing and car wash in Tashkent"},"address":{"ru":"Ташкент, Мирзо-Улугбекский район, ул. Чуст, 10","uz":"Toshkent sh., Mirzo Ulug'bek tumani, Chust ko'chasi, 10","en":"Tashkent, Mirzo Ulugbek district, Chust street, 10"},"phones":["+998337302777","+998977302777"],"phonesDisplay":["+998 33 730-27-77","+998 97 730-27-77"],"telegram":"","instagram":"","mapQuery":"Tashkent, Chust street 10","workDays":[1,2,3,4,5],"openHour":9,"closeHour":22,"slotMinutes":60,"bookingDaysAhead":7,"hours":{"ru":"Пн–Пт 09:00–22:00, Сб–Вс выходной","uz":"Du–Ju 09:00–22:00, Sh–Yak dam olish","en":"Mon–Fri 09:00–22:00, Sat–Sun closed"},"currency":"UZS","notes":"Hours, phones and address come from the Golden Pages directory (renewed 2026-02-10). Fill in telegram/instagram and confirm hours with the owner.","botUsername":""};
+const BASE = {"ru":{"metaTitle":"Garage Detailing — автосервис, детейлинг и мойка в Ташкенте","metaDesc":"Автосервис, детейлинг и автомойка в Ташкенте. Диагностика, ремонт, полировка, керамика, химчистка. Онлайн-запись.","navServices":"Услуги","navWhy":"Почему мы","navHow":"Как это работает","navBook":"Запись","navFaq":"Вопросы","navContacts":"Контакты","cta":"Записаться","heroTitle":"Ваш автомобиль в надёжных руках","heroText":"Ремонт, обслуживание, детейлинг и мойка в одном месте. Запишитесь онлайн за минуту — без звонков и очередей.","heroCall":"Позвонить","stat1":"3 направления","stat2":"в одном сервисе","stat3":"Пн–Пт","stat4":"09:00–22:00","servicesTitle":"Наши услуги","servicesSub":"Цены указаны «от» — точную стоимость назовём после осмотра.","from":"от","sum":"сум","min":"мин","hour":"ч","book":"Записаться","whyTitle":"Почему выбирают нас","why":[["🛠️","Всё в одном месте","Автосервис, детейлинг и мойка: не нужно ездить по разным адресам."],["💬","Честная цена","Сначала диагностика и смета, потом работа. Без скрытых доплат."],["⏱️","Точно в срок","Запись на конкретное время: ваша машина не ждёт в очереди."],["🧪","Качественные материалы","Используем проверенные масла, запчасти и химию для детейлинга."],["📲","Удобная связь","Запись на сайте и в Telegram-боте, напоминания о визите."],["🕘","Работаем допоздна","До 22:00 по будням — удобно после работы."]],"howTitle":"Как это работает","how":[["1","Выберите услугу","Откройте каталог и выберите нужную услугу."],["2","Выберите время","Покажем свободные дни и часы на ближайшую неделю."],["3","Приезжайте","Мы подтвердим запись и напомним о визите."]],"bookTitle":"Онлайн-запись","bookSub":"Заполните форму — мы подтвердим запись по телефону или в Telegram.","fService":"Услуга","fDate":"Дата","fTime":"Время","fName":"Ваше имя","fPhone":"Телефон","fCar":"Автомобиль (марка, модель)","fComment":"Комментарий","choose":"Выберите…","noSlots":"Нет свободного времени на эту дату","loadingSlots":"Загрузка…","send":"Отправить заявку","sending":"Отправляем…","okTitle":"Заявка принята!","okText":"Номер вашей записи","errors":{"bad_service":"Выберите услугу.","bad_date":"Выберите дату.","bad_time":"Выберите время.","bad_name":"Укажите имя.","bad_phone":"Укажите телефон в формате +998 90 123-45-67.","slot_taken":"Это время уже занято, выберите другое.","server_error":"Не удалось отправить. Позвоните нам или попробуйте позже."},"botTitle":"Запись в Telegram","botText":"Записывайтесь, смотрите цены и управляйте записями в нашем боте.","botBtn":"Открыть бота","faqTitle":"Частые вопросы","faq":[["Нужна ли предварительная запись?","Желательно: так мы гарантируем время и не заставим вас ждать. Записаться можно на сайте, в Telegram или по телефону."],["Как узнать точную стоимость?","В каталоге указаны цены «от». Итоговую стоимость мы назовём после осмотра или диагностики и согласуем с вами до начала работ."],["Сколько занимает диагностика?","Компьютерная диагностика обычно занимает около часа."],["Можно ли отменить или перенести запись?","Да. Позвоните нам или отмените запись в Telegram-боте в разделе «Мои записи»."],["Вы работаете по выходным?","По нашим данным, сервис работает с понедельника по пятницу. Актуальный график уточняйте по телефону."],["Как оплатить услуги?","Способы оплаты уточняйте при записи — мы подскажем доступные варианты."]],"contactsTitle":"Контакты","address":"Адрес","phones":"Телефоны","hours":"Режим работы","footer":"Все права защищены."},"uz":{"metaTitle":"Garage Detailing — Toshkentda avtoservis, detayling va avtomoyka","metaDesc":"Toshkentda avtoservis, detayling va avtomoyka. Diagnostika, ta'mirlash, jilolash, keramika, kimyoviy tozalash. Onlayn yozilish.","navServices":"Xizmatlar","navWhy":"Nega biz","navHow":"Qanday ishlaydi","navBook":"Yozilish","navFaq":"Savollar","navContacts":"Kontaktlar","cta":"Yozilish","heroTitle":"Avtomobilingiz ishonchli qo'llarda","heroText":"Ta'mirlash, xizmat ko'rsatish, detayling va avtomoyka bir joyda. Bir daqiqada onlayn yoziling — qo'ng'iroqsiz va navbatsiz.","heroCall":"Qo'ng'iroq qilish","stat1":"3 yo'nalish","stat2":"bitta servisda","stat3":"Du–Ju","stat4":"09:00–22:00","servicesTitle":"Xizmatlarimiz","servicesSub":"Narxlar «dan» ko'rsatilgan — aniq narxni ko'rikdan so'ng aytamiz.","from":"dan","sum":"so'm","min":"daq","hour":"s","book":"Yozilish","whyTitle":"Nega bizni tanlashadi","why":[["🛠️","Hammasi bir joyda","Avtoservis, detayling va avtomoyka: turli manzillarga borish shart emas."],["💬","Halol narx","Avval diagnostika va smeta, keyin ish. Yashirin to'lovlarsiz."],["⏱️","Aniq vaqtida","Belgilangan vaqtga yozilish: mashinangiz navbatda kutmaydi."],["🧪","Sifatli materiallar","Sinalgan moylar, ehtiyot qismlar va detayling kimyosi."],["📲","Qulay aloqa","Saytda va Telegram-botda yozilish, tashrif haqida eslatmalar."],["🕘","Kechgacha ishlaymiz","Ish kunlari 22:00 gacha — ishdan keyin qulay."]],"howTitle":"Qanday ishlaydi","how":[["1","Xizmatni tanlang","Katalogni oching va kerakli xizmatni tanlang."],["2","Vaqtni tanlang","Yaqin hafta uchun bo'sh kun va soatlarni ko'rsatamiz."],["3","Keling","Yozilishni tasdiqlaymiz va tashrifni eslatamiz."]],"bookTitle":"Onlayn yozilish","bookSub":"Shaklni to'ldiring — yozilishni telefon yoki Telegram orqali tasdiqlaymiz.","fService":"Xizmat","fDate":"Sana","fTime":"Vaqt","fName":"Ismingiz","fPhone":"Telefon","fCar":"Avtomobil (marka, model)","fComment":"Izoh","choose":"Tanlang…","noSlots":"Bu sanada bo'sh vaqt yo'q","loadingSlots":"Yuklanmoqda…","send":"Ariza yuborish","sending":"Yuborilmoqda…","okTitle":"Ariza qabul qilindi!","okText":"Yozilish raqamingiz","errors":{"bad_service":"Xizmatni tanlang.","bad_date":"Sanani tanlang.","bad_time":"Vaqtni tanlang.","bad_name":"Ismingizni kiriting.","bad_phone":"Telefonni +998 90 123-45-67 formatida kiriting.","slot_taken":"Bu vaqt band, boshqasini tanlang.","server_error":"Yuborib bo'lmadi. Bizga qo'ng'iroq qiling yoki keyinroq urinib ko'ring."},"botTitle":"Telegram orqali yozilish","botText":"Botimizda yoziling, narxlarni ko'ring va yozilishlaringizni boshqaring.","botBtn":"Botni ochish","faqTitle":"Ko'p beriladigan savollar","faq":[["Oldindan yozilish kerakmi?","Tavsiya etiladi: shunda vaqtni kafolatlaymiz va sizni kutdirmaymiz. Sayt, Telegram yoki telefon orqali yozilish mumkin."],["Aniq narxni qanday bilaman?","Katalogda «dan» narxlar ko'rsatilgan. Yakuniy narxni ko'rik yoki diagnostikadan so'ng aytamiz va ishdan oldin kelishamiz."],["Diagnostika qancha vaqt oladi?","Kompyuter diagnostikasi odatda taxminan bir soat vaqt oladi."],["Yozilishni bekor qilish yoki ko'chirish mumkinmi?","Ha. Bizga qo'ng'iroq qiling yoki Telegram-botda «Mening yozilishlarim» bo'limida bekor qiling."],["Dam olish kunlari ishlaysizmi?","Bizdagi ma'lumotga ko'ra servis dushanbadan jumagacha ishlaydi. Dolzarb jadvalni telefon orqali aniqlang."],["To'lovni qanday amalga oshiraman?","To'lov usullarini yozilishda aniqlang — mavjud variantlarni aytamiz."]],"contactsTitle":"Kontaktlar","address":"Manzil","phones":"Telefonlar","hours":"Ish tartibi","footer":"Barcha huquqlar himoyalangan."},"en":{"metaTitle":"Garage Detailing — auto service, detailing and car wash in Tashkent","metaDesc":"Auto service, detailing and car wash in Tashkent. Diagnostics, repair, polishing, ceramic coating, deep cleaning. Book online.","navServices":"Services","navWhy":"Why us","navHow":"How it works","navBook":"Book","navFaq":"FAQ","navContacts":"Contacts","cta":"Book now","heroTitle":"Your car is in safe hands","heroText":"Repair, maintenance, detailing and car wash in one place. Book online in a minute — no calls, no queues.","heroCall":"Call us","stat1":"3 services","stat2":"under one roof","stat3":"Mon–Fri","stat4":"09:00–22:00","servicesTitle":"Our services","servicesSub":"Prices are \"from\" — we confirm the exact cost after inspection.","from":"from","sum":"UZS","min":"min","hour":"h","book":"Book","whyTitle":"Why choose us","why":[["🛠️","Everything in one place","Auto service, detailing and car wash: no need to visit several addresses."],["💬","Fair pricing","Diagnostics and an estimate first, work after. No hidden fees."],["⏱️","On time","Booked time slots: your car does not wait in a queue."],["🧪","Quality materials","Proven oils, parts and detailing chemistry."],["📲","Easy contact","Book on the site or in our Telegram bot, with visit reminders."],["🕘","Open late","Until 22:00 on weekdays — convenient after work."]],"howTitle":"How it works","how":[["1","Pick a service","Open the catalog and choose what you need."],["2","Pick a time","We show free days and hours for the coming week."],["3","Drive in","We confirm your booking and remind you before the visit."]],"bookTitle":"Online booking","bookSub":"Fill in the form — we will confirm by phone or Telegram.","fService":"Service","fDate":"Date","fTime":"Time","fName":"Your name","fPhone":"Phone","fCar":"Car (make, model)","fComment":"Comment","choose":"Choose…","noSlots":"No free time on this date","loadingSlots":"Loading…","send":"Send request","sending":"Sending…","okTitle":"Request received!","okText":"Your booking number","errors":{"bad_service":"Please choose a service.","bad_date":"Please choose a date.","bad_time":"Please choose a time.","bad_name":"Please enter your name.","bad_phone":"Enter a phone number like +998 90 123-45-67.","slot_taken":"This time is already taken, please pick another.","server_error":"Could not send. Please call us or try again later."},"botTitle":"Book in Telegram","botText":"Book, check prices and manage your bookings in our bot.","botBtn":"Open the bot","faqTitle":"FAQ","faq":[["Do I need to book in advance?","It is best to: that guarantees your time slot. You can book on the site, in Telegram or by phone."],["How do I find out the exact price?","The catalog shows \"from\" prices. We give the final cost after inspection or diagnostics and agree it with you before any work."],["How long does diagnostics take?","Computer diagnostics usually takes about an hour."],["Can I cancel or reschedule?","Yes. Call us or cancel in the Telegram bot under \"My bookings\"."],["Are you open on weekends?","According to our data the service is open Monday to Friday. Please confirm the current schedule by phone."],["How can I pay?","Ask about payment options when booking — we will tell you what is available."]],"contactsTitle":"Contacts","address":"Address","phones":"Phones","hours":"Opening hours","footer":"All rights reserved."}};
+
+// Prototype-only strings (extend the site dictionary).
+const EXTRA = {
+  ru: {
+    protoA: 'ПРОТОТИП ДЛЯ ПОКАЗА КЛИЕНТУ', protoB: 'Цены и график примерные · запись работает в демо-режиме',
+    brandSub: 'ТАШКЕНТ · ул. ЧУСТ, 10', navBot: 'Telegram-бот',
+    heroEyebrow: 'Автосервис · Детейлинг · Мойка',
+    heroTitle: 'Один адрес для <em>всех задач</em> вашей машины',
+    heroText: 'Диагностика и ремонт, полировка и керамика, мойка и химчистка. Выбираете время онлайн, приезжаете к назначенному часу, машина не стоит в очереди.',
+    seePrices: 'Смотреть цены',
+    facts: [['17', 'услуг в каталоге'], ['09–22', 'Пн–Пт, по записи'], ['RU · UZ · EN', 'сайт и бот']],
+    boardTitle: 'Свободные окна', boardSub: 'на 7 дней', free: 'свободно', busy: 'занято',
+    tabNote: { service: 'Диагностика, плановое ТО и ремонт.', detailing: 'Защита и восстановление внешнего вида.', wash: 'Быстро и аккуратно, без царапин.' },
+    book: 'Записаться', navBook: 'Запись',
+    ticketTitle: 'Наряд на работы', ticketFoot: 'Администратор подтвердит запись звонком или в Telegram.',
+    tService: 'Услуга', tWhen: 'Дата и время', tClient: 'Клиент', tPhone: 'Телефон', tCar: 'Автомобиль', tPost: 'Пост', tStatus: 'Статус', statusNew: 'Ожидает подтверждения',
+    fPlate: 'Госномер', fNote: 'Комментарий', fCar: 'Марка и модель', demoNote: 'Демо: данные никуда не отправляются. В рабочей версии заявка попадает в базу и в Telegram администратору.',
+    openMap: 'Открыть в Google Maps',
+    botList: ['Каталог услуг и цены в одном нажатии', 'Запись на удобное время за полминуты', 'Раздел «Мои записи» с отменой', 'Напоминание накануне визита', 'Заявка сразу приходит администратору'],
+    chat: [['bot', 'Здравствуйте! Это бот Garage Detailing. Выберите действие:'], ['chips', ['📝 Записаться', '💰 Услуги и цены', '📋 Мои записи']], ['me', '📝 Записаться'], ['bot', 'Выберите услугу:'], ['chips', ['Диагностика — от 80 000', 'Полировка — от 600 000']], ['me', 'Диагностика — от 80 000'], ['bot', 'Свободное время на завтра:'], ['chips', ['10:00', '12:00', '15:00', '18:00']], ['me', '12:00'], ['bot', '✅ Запись принята. Напомним накануне визита.']],
+    hoursDays: [['Пн–Пт', '09:00–22:00'], ['Сб', 'выходной'], ['Вс', 'выходной']],
+    kvAddr: 'Адрес', kvPhone: 'Телефоны', kvHours: 'Режим', kvLang: 'Языки', kvLangV: 'Русский, Oʻzbekcha, English',
+    footNote: 'Сайт-прототип. Логотип, фото и цены будут заменены на реальные.',
+    days: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'], locale: 'ru-RU',
+  },
+  uz: {
+    protoA: 'MIJOZGA KOʻRSATISH UCHUN PROTOTIP', protoB: 'Narxlar va jadval taxminiy · yozilish demo rejimida',
+    brandSub: 'TOSHKENT · CHUST KOʻCHASI, 10', navBot: 'Telegram-bot',
+    heroEyebrow: 'Avtoservis · Detayling · Moyka',
+    heroTitle: 'Mashinangizning <em>barcha ishlari</em> uchun bitta manzil',
+    heroText: 'Diagnostika va ta’mirlash, jilolash va keramika, moyka va kimyoviy tozalash. Vaqtni onlayn tanlaysiz, belgilangan soatda kelasiz, mashina navbatda turmaydi.',
+    seePrices: 'Narxlarni ko’rish',
+    facts: [['17', 'xizmat katalogda'], ['09–22', 'Du–Ju, yozilish bilan'], ['RU · UZ · EN', 'sayt va bot']],
+    boardTitle: 'Bo‘sh vaqtlar', boardSub: '7 kunga', free: 'bo‘sh', busy: 'band',
+    tabNote: { service: 'Diagnostika, rejali xizmat va ta’mirlash.', detailing: 'Tashqi ko‘rinishni himoya qilish va tiklash.', wash: 'Tez va ehtiyotkorlik bilan, chiziqlarsiz.' },
+    book: 'Yozilish', navBook: 'Yozilish',
+    ticketTitle: 'Ish buyurtmasi', ticketFoot: 'Administrator yozilishni qo‘ng‘iroq yoki Telegram orqali tasdiqlaydi.',
+    tService: 'Xizmat', tWhen: 'Sana va vaqt', tClient: 'Mijoz', tPhone: 'Telefon', tCar: 'Avtomobil', tPost: 'Post', tStatus: 'Holat', statusNew: 'Tasdiqlanishi kutilmoqda',
+    fPlate: 'Davlat raqami', fNote: 'Izoh', fCar: 'Marka va model', demoNote: 'Demo: ma’lumotlar hech qayoqqa yuborilmaydi. Ishchi versiyada ariza bazaga va administratorning Telegramiga tushadi.',
+    openMap: 'Google Maps’da ochish',
+    botList: ['Xizmatlar katalogi va narxlar bir bosishda', 'Qulay vaqtga yarim daqiqada yozilish', '«Mening yozilishlarim» bo‘limi, bekor qilish bilan', 'Tashrifdan oldin eslatma', 'Ariza darhol administratorga tushadi'],
+    chat: [['bot', 'Assalomu alaykum! Bu Garage Detailing boti. Amalni tanlang:'], ['chips', ['📝 Yozilish', '💰 Xizmatlar va narxlar', '📋 Mening yozilishlarim']], ['me', '📝 Yozilish'], ['bot', 'Xizmatni tanlang:'], ['chips', ['Diagnostika — 80 000 dan', 'Jilolash — 600 000 dan']], ['me', 'Diagnostika — 80 000 dan'], ['bot', 'Ertaga uchun bo‘sh vaqt:'], ['chips', ['10:00', '12:00', '15:00', '18:00']], ['me', '12:00'], ['bot', '✅ Yozilish qabul qilindi. Tashrifdan oldin eslatamiz.']],
+    hoursDays: [['Du–Ju', '09:00–22:00'], ['Sh', 'dam olish'], ['Yak', 'dam olish']],
+    kvAddr: 'Manzil', kvPhone: 'Telefonlar', kvHours: 'Ish tartibi', kvLang: 'Tillar', kvLangV: 'Русский, Oʻzbekcha, English',
+    footNote: 'Prototip sayt. Logotip, suratlar va narxlar haqiqiylariga almashtiriladi.',
+    days: ['Yak', 'Du', 'Se', 'Ch', 'Pa', 'Ju', 'Sh'], locale: 'uz-UZ',
+  },
+  en: {
+    protoA: 'PROTOTYPE FOR CLIENT REVIEW', protoB: 'Prices and hours are examples · booking runs in demo mode',
+    brandSub: 'TASHKENT · CHUST ST, 10', navBot: 'Telegram bot',
+    heroEyebrow: 'Auto service · Detailing · Car wash',
+    heroTitle: 'One address for <em>everything</em> your car needs',
+    heroText: 'Diagnostics and repair, polishing and ceramic coating, washing and deep cleaning. Pick a time online, arrive at the hour, and your car never waits in a queue.',
+    seePrices: 'See prices',
+    facts: [['17', 'services listed'], ['09–22', 'Mon–Fri, by booking'], ['RU · UZ · EN', 'site and bot']],
+    boardTitle: 'Open slots', boardSub: 'next 7 days', free: 'free', busy: 'booked',
+    tabNote: { service: 'Diagnostics, scheduled maintenance and repair.', detailing: 'Protecting and restoring the look of the car.', wash: 'Fast and careful, no scratches.' },
+    book: 'Book', navBook: 'Booking',
+    ticketTitle: 'Work order', ticketFoot: 'The front desk will confirm by phone or in Telegram.',
+    tService: 'Service', tWhen: 'Date and time', tClient: 'Client', tPhone: 'Phone', tCar: 'Car', tPost: 'Bay', tStatus: 'Status', statusNew: 'Awaiting confirmation',
+    fPlate: 'Licence plate', fNote: 'Comment', fCar: 'Make and model', demoNote: 'Demo: nothing is sent anywhere. In the live version the request goes to the database and to the admin in Telegram.',
+    openMap: 'Open in Google Maps',
+    botList: ['Service catalog and prices in one tap', 'Booking a slot in half a minute', '“My bookings” with cancellation', 'Reminder the day before the visit', 'The admin gets every request instantly'],
+    chat: [['bot', 'Hello! This is the Garage Detailing bot. Choose an action:'], ['chips', ['📝 Book', '💰 Services & prices', '📋 My bookings']], ['me', '📝 Book'], ['bot', 'Choose a service:'], ['chips', ['Diagnostics — from 80 000', 'Polishing — from 600 000']], ['me', 'Diagnostics — from 80 000'], ['bot', 'Free time tomorrow:'], ['chips', ['10:00', '12:00', '15:00', '18:00']], ['me', '12:00'], ['bot', '✅ Booking received. We will remind you the day before.']],
+    hoursDays: [['Mon–Fri', '09:00–22:00'], ['Sat', 'closed'], ['Sun', 'closed']],
+    kvAddr: 'Address', kvPhone: 'Phones', kvHours: 'Hours', kvLang: 'Languages', kvLangV: 'Русский, Oʻzbekcha, English',
+    footNote: 'Prototype site. Logo, photos and prices will be replaced with real ones.',
+    days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], locale: 'en-GB',
+  },
+};
+
+const $ = (id) => document.getElementById(id);
+const LANGS = ['ru', 'uz', 'en'];
+const pad = (n) => String(n).padStart(2, '0');
+const fmt = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+let lang = 'ru', category = 'service', activeDay = null, picked = { date: '', time: '' };
+
+const T = () => Object.assign({}, BASE[lang], EXTRA[lang]);
+
+/* ----- slots: deterministic "busy" pattern so the prototype looks lived-in ----- */
+const SLOT_TIMES = []; for (let h = BUSINESS.openHour; h < BUSINESS.closeHour; h++) SLOT_TIMES.push(pad(h) + ':00');
+function isoLocal(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+function workDays() {
+  const out = [], d = new Date(); d.setHours(12, 0, 0, 0);
+  for (let i = 0; out.length < 6 && i < 14; i++) { const x = new Date(d); x.setDate(d.getDate() + i); if (BUSINESS.workDays.includes(x.getDay())) out.push(x); }
+  return out;
+}
+function seeded(str) { let h = 2166136261; for (const c of str) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return () => ((h = Math.imul(h ^ (h >>> 15), 2246822519)) >>> 0) / 4294967296; }
+const booked = new Set();
+function isBusy(date, time) {
+  if (booked.has(date + time)) return true;
+  const r = seeded(date + time)();
+  return r < 0.38;
+}
+function freeSlots(date) {
+  const now = new Date(), today = isoLocal(now), mins = now.getHours() * 60 + now.getMinutes();
+  return SLOT_TIMES.filter((t) => {
+    if (isBusy(date, t)) return false;
+    if (date !== today) return true;
+    const [h, m] = t.split(':').map(Number); return h * 60 + m > mins + 30;
+  });
+}
+const dayLabel = (d, short) => short
+  ? T().days[d.getDay()] + ' ' + d.getDate()
+  : d.toLocaleDateString(T().locale, { weekday: 'short', day: 'numeric', month: 'long' });
+
+/* ----- renderers ----- */
+function renderStatic() {
+  const t = T();
+  document.documentElement.lang = lang;
+  document.title = 'Garage Detailing';
+  document.querySelectorAll('[data-t]').forEach((n) => { n.textContent = t[n.dataset.t]; });
+  $('protoA').textContent = t.protoA; $('protoB').textContent = t.protoB;
+  $('brandSub').textContent = t.brandSub;
+  $('heroEyebrow').textContent = t.heroEyebrow;
+  $('heroTitle').innerHTML = t.heroTitle;
+  $('heroText').textContent = t.heroText;
+  $('facts').innerHTML = t.facts.map((f) => '<li><b>' + f[0] + '</b>' + f[1] + '</li>').join('');
+  $('steps').innerHTML = t.how.map((s) => '<li><h3>' + s[1] + '</h3><p>' + s[2] + '</p></li>').join('');
+  $('why').innerHTML = t.why.map((w) => '<div><h3>' + w[1] + '</h3><p>' + w[2] + '</p></div>').join('');
+  $('botList').innerHTML = t.botList.map((x) => '<li>' + x + '</li>').join('');
+  $('chat').innerHTML = t.chat.map((m) => m[0] === 'chips'
+    ? '<div class="chips">' + m[1].map((c) => '<span class="chip">' + c + '</span>').join('') + '</div>'
+    : '<div class="msg ' + (m[0] === 'me' ? 'me' : '') + '">' + m[1] + '</div>').join('');
+  $('faqList').innerHTML = t.faq.map((q) => '<details><summary>' + q[0] + '</summary><p>' + q[1] + '</p></details>').join('');
+  $('kv').innerHTML = '<dt>' + t.kvAddr + '</dt><dd>' + BUSINESS.address[lang] + '</dd>'
+    + '<dt>' + t.kvPhone + '</dt><dd>' + BUSINESS.phonesDisplay.map((p, i) => '<a href="tel:' + BUSINESS.phones[i] + '">' + p + '</a>').join('<br>') + '</dd>'
+    + '<dt>' + t.kvHours + '</dt><dd>' + BUSINESS.hours[lang] + '</dd>'
+    + '<dt>' + t.kvLang + '</dt><dd>' + t.kvLangV + '</dd>';
+  $('mapLink').href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(BUSINESS.mapQuery);
+  $('sched').innerHTML = t.hoursDays.map((r, i) => '<tr class="' + (i ? 'closed' : '') + '"><td>' + r[0] + '</td><td>' + r[1] + '</td></tr>').join('');
+  $('footNote').textContent = t.footNote;
+  $('yr').textContent = new Date().getFullYear();
+  document.querySelectorAll('[data-lang]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+}
+
+function renderDays() {
+  const days = workDays();
+  if (!activeDay) activeDay = isoLocal(days[0]);
+  $('days').innerHTML = days.map((d) => {
+    const iso = isoLocal(d);
+    return '<button type="button" class="day" data-day="' + iso + '" aria-pressed="' + (iso === activeDay) + '">' + dayLabel(d, true) + '</button>';
+  }).join('');
+  renderSlots();
+}
+function renderSlots() {
+  const free = new Set(freeSlots(activeDay));
+  $('slots').innerHTML = SLOT_TIMES.map((t) => '<button type="button" class="slot" data-time="' + t + '"' + (free.has(t) ? '' : ' disabled') + '>' + t + '</button>').join('');
+}
+
+function renderTabs() {
+  $('tabs').innerHTML = CATALOG.categories.map((c) => '<button type="button" role="tab" class="tab" data-cat="' + c.id + '" aria-selected="' + (c.id === category) + '">' + c.name[lang] + '</button>').join('');
+  $('tabNote').textContent = T().tabNote[category];
+  const t = T();
+  $('rows').innerHTML = CATALOG.services.filter((s) => s.category === category).map((s) => {
+    const dur = s.minutes >= 60 ? (s.minutes / 60).toFixed(1).replace('.0', '') + ' ' + t.hour : s.minutes + ' ' + t.min;
+    return '<li class="row"><span class="name">' + s.name[lang] + '</span>'
+      + '<span class="price">' + t.from + ' ' + fmt(s.priceFrom) + ' ' + t.sum + '</span>'
+      + '<span class="desc">' + s.desc[lang] + '</span>'
+      + '<span class="time">' + dur + '</span>'
+      + '<button type="button" class="btn sm ghost" data-book="' + s.id + '">' + t.book + '</button></li>';
+  }).join('');
+}
+
+function renderForm() {
+  const t = T();
+  const svc = $('fService').value;
+  $('fService').innerHTML = '<option value="">' + t.choose + '</option>' + CATALOG.categories.map((c) =>
+    '<optgroup label="' + c.name[lang] + '">' + CATALOG.services.filter((s) => s.category === c.id).map((s) => '<option value="' + s.id + '">' + s.name[lang] + '</option>').join('') + '</optgroup>').join('');
+  $('fService').value = svc;
+  const date = $('fDate').value || picked.date;
+  $('fDate').innerHTML = '<option value="">' + t.choose + '</option>' + workDays().map((d) => '<option value="' + isoLocal(d) + '">' + dayLabel(d, false) + '</option>').join('');
+  $('fDate').value = date;
+  fillTimes($('fTime').value || picked.time);
+}
+function fillTimes(keep) {
+  const t = T(), date = $('fDate').value;
+  const list = date ? freeSlots(date) : [];
+  $('fTime').innerHTML = '<option value="">' + (date && !list.length ? t.noSlots : t.choose) + '</option>' + list.map((s) => '<option value="' + s + '">' + s + '</option>').join('');
+  if (keep && list.includes(keep)) $('fTime').value = keep;
+}
+
+function setLang(l) {
+  lang = l;
+  try { localStorage.setItem('gd-lang', l); } catch (e) { /* storage unavailable */ }
+  renderStatic(); renderDays(); renderTabs(); renderForm();
+}
+
+/* ----- events ----- */
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.lang) return setLang(b.dataset.lang);
+  if (b.dataset.day) { activeDay = b.dataset.day; return renderDays(); }
+  if (b.classList.contains('slot')) {
+    picked = { date: activeDay, time: b.dataset.time };
+    $('fDate').value = activeDay; fillTimes(picked.time);
+    $('book').scrollIntoView(); return $('fService').focus({ preventScroll: true });
+  }
+  if (b.dataset.cat) { category = b.dataset.cat; return renderTabs(); }
+  if (b.dataset.book) { $('fService').value = b.dataset.book; $('book').scrollIntoView(); $('fService').focus({ preventScroll: true }); }
+});
+$('fDate').addEventListener('change', () => fillTimes(''));
+
+$('form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const t = T(), f = e.target;
+  const v = (n) => f.elements[n].value.trim();
+  const digits = v('phone').replace(/\D/g, '');
+  const msg = !v('service') ? t.errors.bad_service : !v('date') ? t.errors.bad_date : !v('time') ? t.errors.bad_time
+    : v('name').length < 2 ? t.errors.bad_name : !(digits.length === 9 || (digits.length === 12 && digits.startsWith('998'))) ? t.errors.bad_phone : '';
+  $('err').textContent = msg;
+  if (msg) return;
+
+  const svc = CATALOG.services.find((s) => s.id === v('service'));
+  const d = new Date(v('date') + 'T12:00:00');
+  booked.add(v('date') + v('time'));
+  const no = 'GD-' + String(d.getFullYear()).slice(2) + pad(d.getMonth() + 1) + pad(d.getDate()) + '-' + pad(1 + Math.floor(Math.random() * 98));
+  const phone = '+998 ' + digits.slice(-9).replace(/(\d{2})(\d{3})(\d{2})(\d{2})/, '$1 $2-$3-$4');
+  const rows = [[t.tService, svc.name[lang]], [t.tWhen, dayLabel(d, false) + ', ' + v('time')], [t.tClient, v('name')], [t.tPhone, phone]];
+  const car = [v('car'), v('plate').toUpperCase()].filter(Boolean).join(' · ');
+  if (car) rows.push([t.tCar, car]);
+  rows.push([t.tPost, String(1 + (parseInt(v('time'), 10) % 3))], [t.tStatus, t.statusNew]);
+
+  $('tNo').textContent = '№ ' + no;
+  $('tBody').innerHTML = rows.map((r) => '<dt></dt><dd></dd>').join('');
+  const cells = $('tBody').children;
+  rows.forEach((r, i) => { cells[i * 2].textContent = r[0]; cells[i * 2 + 1].textContent = r[1]; });
+  $('ticket').hidden = false;
+  $('ticket').scrollIntoView({ block: 'nearest' });
+  f.reset(); picked = { date: '', time: '' };
+  renderForm(); renderSlots();
+});
+
+/* ----- init ----- */
+(function init() {
+  let saved = null;
+  try { saved = localStorage.getItem('gd-lang'); } catch (e) { /* ignore */ }
+  const nav = (navigator.language || 'ru').slice(0, 2);
+  lang = LANGS.includes(saved) ? saved : LANGS.includes(nav) ? nav : 'ru';
+  setLang(lang);
+})();
+</script>
